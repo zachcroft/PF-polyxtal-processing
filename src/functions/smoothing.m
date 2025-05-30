@@ -1,6 +1,6 @@
 % This script performs the smoothing via a phase-field
 % method for grain growth
-function [op_map] = smoothing(phi,nstep,figure_height,gpu)
+function [op_map] = smoothing(phi,M,nstep,figure_height,gpu)
     Nx     = size(phi,1);
     Ny     = size(phi,2);
     Nz     = size(phi,3);
@@ -30,8 +30,6 @@ function [op_map] = smoothing(phi,nstep,figure_height,gpu)
     %=============================
     % Phase-field parameters
     W        = 1.0;   % Gradient energy coefficient
-    M        = 1.0;   % Allen-Cahn mobility
-    radius   = 5.0;   % Particle size
     alpha    = 1.5;
     kappa    = 0.5;
     dx       = 0.5;
@@ -41,9 +39,7 @@ function [op_map] = smoothing(phi,nstep,figure_height,gpu)
     nprint         = 1; % Plotting frequency
     exterior_steps = 5; % Number of steps for smoothing exterior region
 
-    % Calculate mobility based on completeness
-    M = ones(Nx,Ny,Nz);
-    %M = calculate_mobility();
+    figure;
     
     disp("Begin smoothing process...")
     % Smoothing w/ grain growth model
@@ -63,23 +59,31 @@ function [op_map] = smoothing(phi,nstep,figure_height,gpu)
         % Plotting
         if (mod(step,nprint) == 0)
             %disp(step)
+
+            clf;
     
             subplot(2,1,1)
-            A = squeeze(M(100,:,:));
-            imagesc(A);
+            if dim == 2
+                A = M;
+            else
+                A = squeeze(M(100,:,:));
+            end
+            imagesc(A); 
             colorbar; colormap(jet); clim([0 1])
             title("Mobility");
-    
+            axis square;
+
             subplot(2,1,2)
             if dim == 2
               B = op_map;
             else
               B = squeeze(op_map(floor(Nx/2),:,:));
             end
-            imagesc(B);
+            imagesc(B); 
             colorbar; colormap(jet); clim([1 num_op])
             title(strcat("Step: ",num2str(step)));
             set(gcf,'Position',[100,100,figure_height*0.6,figure_height])
+            axis square;
             drawnow;
             %print("images/step="+step,'-dpng')
         end

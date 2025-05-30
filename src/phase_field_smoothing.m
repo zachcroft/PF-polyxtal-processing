@@ -5,22 +5,29 @@ tic;
 
 % Code Parameters
 %----------------------------------------------------
-nstep         = 5;     % # of smoothing steps
+nstep         = 50;     % # of smoothing steps
+
+a             = 0.5;   % Lower completeness threshold
+b             = 0.8;   % Upper completeness threshold
+M_min         = 0.12;  % Minimum mobility
+
 trim          = 0;     % Number of px to trim from end
 figure_height = 1000;  % Controls the size of figures
 gpu           = false; % GPU acceleration
 
-filename = "../input_data/test_2D.mat";   % Path to .mat file
+grain_ID_file     = "../input_data/gid_map_2D.mat";      % Path to grain ID .mat file
+completeness_file = "../input_data/completeness_2D.mat"; % Path to completeness .mat file
 %----------------------------------------------------
-
 addpath('functions');
-load(filename);
+load(grain_ID_file);
+load(completeness_file)
 
 [gid_map_seq,mapping] = sequentialize(gid_map,trim);
 op_mapping            = calculate_op_assignment(gid_map_seq);
 centroids             = calculate_centroids(gid_map_seq,op_mapping);
 phi                   = generate_order_parameters(gid_map_seq, op_mapping);
-op_map                = smoothing(phi,nstep,figure_height,gpu);
+M                     = calculate_mobility(C,a,b,M_min);
+op_map                = smoothing(phi,M,nstep,figure_height,gpu);
 gid_map_smooth        = convert_to_gid_map(op_map,centroids,gpu);
 final_gid_map         = desequentialize(gid_map_smooth,mapping);
 
