@@ -18,3 +18,8 @@ The main code is /src/phase_field_smoothing.m and has the following parameters:
 - gpu: a flag for using GPU acceleration
 
 After execution the user will have access to the post-processed grain ID map as well as the order parameters.
+
+<img width="203" alt="unprocessed-2D" src="https://github.com/user-attachments/assets/4ba8e838-04a3-4530-a040-dbe28134d0e2" />
+<img width="201" alt="post-processed-2D" src="https://github.com/user-attachments/assets/485df46a-4718-4a2d-9b38-504c7b40f87c" />
+
+2D example: (left) unprocessed grain ID map, (right) post-processed grain ID map
