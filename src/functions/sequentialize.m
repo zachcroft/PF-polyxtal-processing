@@ -1,11 +1,9 @@
 % This function sequentializes the grain ID labels, which is
 % useful for the processing
-function [gid_map_seq,gid_list] = sequentialize(gid_map,trim)
+function [gid_map_seq,gid_list] = sequentialize(gid_map)
     disp("Sequentializing grain IDs...")
 
-    % Voxels 1165 to 1261 are filled with noise. Delete it
-    %gid_map(:,:,end-trim:end) = 0;
-
+    gid_map = single(gid_map);
     % Since the interior pores are labeled the same as the exterior
     % region, perform a flood fill operation to extract the exterior region
     %exterior = bwselect3(gid_map==0, 1, 1, 1);

@@ -11,8 +11,7 @@ a             = 0.5;   % Lower completeness threshold
 b             = 0.8;   % Upper completeness threshold
 M_min         = 0.12;  % Minimum mobility
 
-trim          = 0;     % Number of px to trim from end
-figure_height = 1000;  % Controls the size of figures
+figure_height = 600;   % Controls the size of figures
 gpu           = false; % GPU acceleration
 
 grain_ID_file     = "../input_data/gid_map_2D.mat";      % Path to grain ID .mat file
@@ -22,7 +21,7 @@ addpath('functions');
 load(grain_ID_file);
 load(completeness_file)
 
-[gid_map_seq,mapping] = sequentialize(gid_map,trim);
+[gid_map_seq,mapping] = sequentialize(gid_map);
 op_mapping            = calculate_op_assignment(gid_map_seq);
 centroids             = calculate_centroids(gid_map_seq,op_mapping);
 phi                   = generate_order_parameters(gid_map_seq, op_mapping);
